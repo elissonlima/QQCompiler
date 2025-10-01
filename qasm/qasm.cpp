@@ -23,3 +23,5 @@ std::string QAsm::generate_qasm() const {
 
     return oss.str();
 }
+
+

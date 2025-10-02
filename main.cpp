@@ -20,9 +20,9 @@ int main() {
     ZYZParams params = get_zyz_params_from_matrix(SRQ_X);
 
     QAsm qasm;
-    qasm.define_qubits(2);
-    //qasm.single_qubit_port(params);
-    qasm.two_qubit_controlled(params);
+    qasm.define_qubits(1);
+    qasm.single_qubit_port(params);
+    //qasm.two_qubit_controlled(params);
     cout << qasm.generate_qasm() << endl;
 
     return 0;

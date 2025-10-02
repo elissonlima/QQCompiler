@@ -23,16 +23,16 @@ void QAsm::two_qubit_controlled(const ZYZParams &params) {
     // Matrix C
     qasm_code << "rz(" << (params.delta - params.gamma)/2 << ") q[1];" << std::endl;
     // First C-NOT
-    qasm_code << "CNOT q[0], q[1]" << std::endl;
+    qasm_code << "c q[0], q[1]" << std::endl;
     // Matrix B
     qasm_code << "rz(" << -(params.delta + params.gamma)/2 << ") q[1];" << std::endl;
     qasm_code << "ry(" << -params.gamma/2 << ") q[1];" << std::endl;
     // Second C-NOT
-    qasm_code << "CNOT q[0], q[1]" << std::endl;
+    qasm_code << "c q[0], q[1]" << std::endl;
     // Matrix A
     qasm_code << "ry(" << params.gamma/2 << ") q[1];" << std::endl;
     qasm_code << "rz(" << params.beta << ") q[1];" << std::endl;
-    qasm_code << "phase(" << params.alpha << ") q[0];" << std::endl;
+    qasm_code << "p(" << params.alpha << ") q[0];" << std::endl;
 
 }
 

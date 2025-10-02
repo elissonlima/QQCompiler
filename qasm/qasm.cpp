@@ -4,24 +4,41 @@
 #include <sstream>
 #include "qasm.h"
 
-std::string QAsm::generate_qasm() const {
-    std::ostringstream oss;
-    oss << "include \"stdgates.inc\";" << std::endl;
+void QAsm::define_qubits(const int n_qubits) {
+    if (n_qubits == 1)
+        qasm_code << "qubit q;" << std::endl;
+    else if (n_qubits == 2)
+        qasm_code << "qubit[2] q;" << std::endl;
+}
 
-    oss << "qubit q;" << std::endl;
+void QAsm::single_qubit_port(const ZYZParams &params) {
+    qasm_code << "p(" << params.alpha << ") q;" << std::endl;
+    qasm_code << "rz(" << params.beta << ") q;" << std::endl;
+    qasm_code << "ry(" << params.gamma << ") q;" << std::endl;
+    qasm_code << "rz(" << params.delta << ") q;" << std::endl;
+}
 
-    for (const ZYZParams zyz_param : zyz_gates) {
+void QAsm::two_qubit_controlled(const ZYZParams &params) {
 
-        oss << "p(" << zyz_param.alpha << ") q;" << std::endl;
-        oss << "rz(" << zyz_param.beta << ") q;" << std::endl;
-        oss << "ry(" << zyz_param.gamma << ") q;" << std::endl;
-        oss << "rz(" << zyz_param.delta << ") q;" << std::endl;
+    // Matrix C
+    qasm_code << "rz(" << (params.delta - params.gamma)/2 << ") q[1];" << std::endl;
+    // First C-NOT
+    qasm_code << "CNOT q[0], q[1]" << std::endl;
+    // Matrix B
+    qasm_code << "rz(" << -(params.delta + params.gamma)/2 << ") q[1];" << std::endl;
+    qasm_code << "ry(" << -params.gamma/2 << ") q[1];" << std::endl;
+    // Second C-NOT
+    qasm_code << "CNOT q[0], q[1]" << std::endl;
+    // Matrix A
+    qasm_code << "ry(" << params.gamma/2 << ") q[1];" << std::endl;
+    qasm_code << "rz(" << params.beta << ") q[1];" << std::endl;
+    qasm_code << "phase(" << params.alpha << ") q[0];" << std::endl;
 
-    }
+}
 
-    oss << "c = measure q;" << std::endl;
-
-    return oss.str();
+std::string QAsm::generate_qasm() {
+    qasm_code << "c = measure q;" << std::endl;
+    return qasm_code.str();
 }
 
 

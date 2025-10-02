@@ -12,7 +12,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 find_package(Armadillo REQUIRED)
+find_package(GTest REQUIRED)
+
 include_directories(${ARMADILLO_INCLUDE_DIRS})
+include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable(QQCompiler 
     main.cpp
@@ -23,14 +26,14 @@ target_link_libraries(QQCompiler PRIVATE ${ARMADILLO_LIBRARIES})
 
 enable_testing()
 
-add_executable(tests 
+add_executable(tests
     tests/test.cpp
     qasm/qasm.cpp
     unitary/unitary.cpp
 )
 target_link_libraries(tests PRIVATE 
-    ${ARMADILLO_LIBRARIES} 
-    GTest::gtest_main
+    ${ARMADILLO_LIBRARIES}
+    ${GTEST_LIBRARIES}
 )
 
 add_test(NAME UnitTests COMMAND tests)

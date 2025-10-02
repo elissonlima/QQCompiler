@@ -7,24 +7,21 @@
 #include <string>
 #include <vector>
 
-struct ZYZParams {
-    double alpha;
-    double beta;
-    double gamma;
-    double delta;
-};
+#include "../unitary/unitary.h"
+
 
 class QAsm {
     public:
-        QAsm(const int number_qbits, const std::vector<ZYZParams>& zyz_params) {
-            n_qbits = number_qbits;
-            zyz_gates = zyz_params;
-        }
+        QAsm() {
+            qasm_code << "include \"stdgates.inc\";" << std::endl;
+        };
         ~QAsm() = default;
-        [[nodiscard]] std::string generate_qasm() const;
+        void define_qubits(int n_qubits);
+        void single_qubit_port(const ZYZParams &params);
+        void two_qubit_controlled(const ZYZParams &params);
+        [[nodiscard]] std::string generate_qasm();
     private:
-        int n_qbits;
-        std::vector<ZYZParams> zyz_gates;
+       std::ostringstream qasm_code;
 };
 
 #endif //QQCOMPILER_QASM_H

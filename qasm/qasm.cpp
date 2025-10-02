@@ -37,7 +37,7 @@ void QAsm::two_qubit_controlled(const ZYZParams &params) {
 }
 
 std::string QAsm::generate_qasm() {
-    qasm_code << "c = measure q;" << std::endl;
+    //qasm_code << "c = measure q;" << std::endl;
     return qasm_code.str();
 }
 
